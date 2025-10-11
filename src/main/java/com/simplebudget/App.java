@@ -1,6 +1,7 @@
 /**
  * This file is the starting point of the SimpleBudget app.
  *
+ * @author Maria Jansson
  */
 package com.simplebudget;
 
