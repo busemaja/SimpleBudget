@@ -6,7 +6,6 @@ The purpose of the SimpleBudget App is to provide a simple graphical interface f
 It uses the `BudgetTracker` module to handle all transaction logic, calculations, and file operations.
 
 ## 2. Scope
-
 The app allows the user to:
 - Add new transactions (name, amount, category).
 - Remove existing transactions.
@@ -34,7 +33,6 @@ NFR1|The application shall be implemented in Java using JavaFX for the GUI.|High
 NFR2|All financial logic shall be handled by the `BudgetTracker` module.|High
 NFR3|The GUI shall be intuitive, responsive, and visually minimal.|Medium
 NFR4|Invalid user input shall trigger clear error messages.|Medium
-NFR5|The system shall run on Windows 11 and Java 17 or later.|Low
 
 ## 5. Dependencies
 - Java 17 or later
