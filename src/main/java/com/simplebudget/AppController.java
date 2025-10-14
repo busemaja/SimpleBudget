@@ -20,6 +20,9 @@ import javafx.scene.layout.Pane;
 
 
 public class AppController {
+  private final BudgetAdapter adapter = new BudgetAdapter();
+  private static int idNumberCounter;
+  private ArrayList<String> transactions = new ArrayList<>();
   @FXML
   private AnchorPane rootPane;
   @FXML
@@ -30,7 +33,6 @@ public class AppController {
   private TextArea messageTextArea;
   @FXML
   private TextArea transactionListTextArea;
-  private static int idNumberCounter;
   @FXML
   private TextField idField;
   @FXML
@@ -44,8 +46,7 @@ public class AppController {
 
   @FXML
   private void initialize() {
-    String currentIdNumber = Integer.toString(idNumberCounter);
-    idField.setText(currentIdNumber);
+    idField.setText(Integer.toString(idNumberCounter));
     idNumberCounter++;
     transactionCategoryChoiceBox.getItems().addAll(TransactionCategories.values());
     Platform.runLater(() -> rootPane.requestFocus());
@@ -58,12 +59,15 @@ public class AppController {
       double amount = Double.parseDouble(amountField.getText());
       TransactionCategories category = transactionCategoryChoiceBox.getSelectionModel().getSelectedItem();
 
-      //BudgetAdapter.addTransaction(name, amount, category);
+      transactions = adapter.addTransaction(idNumberCounter, name, amount, category);
       
       nameField.setText("");
       amountField.setText("");
       transactionCategoryChoiceBox.getSelectionModel().clearSelection();
       transactionCategoryChoiceBox.setValue(null);
+      updateTransactionListAndTotalSum();
+      idField.setText(Integer.toString(idNumberCounter));
+      idNumberCounter++;
     } else {
       openMessagePopup("All fields must be filled in.");
     }
@@ -76,7 +80,11 @@ public class AppController {
   }
 
   private void updateTransactionListAndTotalSum() {
-    totalSumTextField.setText("Total sum: " + BudgetAdapter.getTotalSum());
+    transactionListTextArea.setText("");
+    for (String transaction : transactions) {
+      transactionListTextArea.appendText(transaction + "\n");
+    }
+    totalSumTextField.setText("Total sum: " + String.format("%.2f", adapter.getTotalSum()));
   }
 
   @FXML
@@ -99,7 +107,7 @@ public class AppController {
 
   @FXML
   private void onSaveLogToFile() {
-    if (BudgetAdapter.saveLogToFile()) {
+    if (adapter.saveLogToFile()) {
       openMessagePopup("Log saved to file.");
     } else {
       openMessagePopup("Could not save to file.");
