@@ -10,8 +10,10 @@ import java.util.ArrayList;
 
 import budgettracker.TransactionCategories;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -26,7 +28,7 @@ public class AppController {
   @FXML
   private AnchorPane rootPane;
   @FXML
-  private Pane popupPane;
+  private Pane chartPopupPane;
   @FXML
   private Pane messagePopupPane;
   @FXML
@@ -43,6 +45,8 @@ public class AppController {
   private ChoiceBox<TransactionCategories> transactionCategoryChoiceBox;
   @FXML
   private TextField totalSumTextField;
+  @FXML
+  private PieChart categoryPercentageChart;
 
   @FXML
   private void initialize() {
@@ -116,13 +120,15 @@ public class AppController {
   }
 
   @FXML
-  private void openPopup() {
-    popupPane.setVisible(true);
+  private void openChartPopup() {
+    ObservableList<PieChart.Data> chartData = adapter.getPercentagesByCategory();
+    categoryPercentageChart.setData(chartData);
+    chartPopupPane.setVisible(true);
   }
 
   @FXML
-  private void closePopup() {
-    popupPane.setVisible(false);
+  private void closeChartPopup() {
+    chartPopupPane.setVisible(false);
   }
 
   @FXML

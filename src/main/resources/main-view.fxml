@@ -98,7 +98,7 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-    <Button layoutX="22.0" layoutY="558.0" mnemonicParsing="false" onAction="#openPopup" prefHeight="31.0" prefWidth="101.0" text="Show graph">
+    <Button layoutX="22.0" layoutY="558.0" mnemonicParsing="false" onAction="#openChartPopup" prefHeight="31.0" prefWidth="101.0" text="Show graph">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -120,10 +120,10 @@
             <PieChart layoutX="227.0" layoutY="12.0" prefHeight="176.0" prefWidth="180.0" />
          </children>
       </Pane>
-      <Pane fx:id="popupPane" layoutX="205.0" layoutY="109.0" prefHeight="387.0" prefWidth="441.0" style="-fx-background-color: white;; -fx-border-color: black;;" visible="false">
+      <Pane fx:id="chartPopupPane" layoutX="205.0" layoutY="109.0" prefHeight="387.0" prefWidth="441.0" style="-fx-background-color: white;; -fx-border-color: black;;" visible="false">
          <children>
-            <PieChart layoutX="76.0" layoutY="14.0" prefHeight="272.0" prefWidth="290.0" title="Percent per category" />
-            <Button layoutX="182.0" layoutY="342.0" mnemonicParsing="false" onAction="#closePopup" prefHeight="31.0" prefWidth="77.0" text="Close">
+            <PieChart fx:id="categoryPercentageChart" layoutX="14.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="318.0" prefWidth="414.0" title="Percent per category" />
+            <Button layoutX="182.0" layoutY="342.0" mnemonicParsing="false" onAction="#closeChartPopup" prefHeight="31.0" prefWidth="77.0" text="Close">
                <font>
                   <Font size="13.0" />
                </font>

@@ -10,6 +10,9 @@ import java.util.ArrayList;
 
 import budgettracker.BudgetTracker;
 import budgettracker.TransactionCategories;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.PieChart;
 
 class BudgetAdapter {
   BudgetTracker tracker = new BudgetTracker();
@@ -25,6 +28,25 @@ class BudgetAdapter {
   double getTotalSum() {
     return tracker.getCurrentTotal();
   }
+
+  ObservableList<PieChart.Data> getPercentagesByCategory() {
+    String[] percentages = tracker.getPercentagesByCategory();
+    ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList();
+
+    for (String entry : percentages) {
+        if (entry == null || entry.isBlank()) continue;
+
+        String[] parts = entry.split(" ");
+        if (parts.length == 2) {
+            String category = parts[0];
+            double amount = Double.parseDouble(parts[1].replace("%", "").replace(",", "."));
+            pieData.add(new PieChart.Data(category, amount));
+        }
+    }
+
+    return(pieData);
+  }
+
   boolean saveLogToFile() {
     //tracker.saveLogToFile(filepath);
     return false;
