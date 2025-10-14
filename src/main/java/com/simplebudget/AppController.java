@@ -14,7 +14,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -34,7 +36,7 @@ public class AppController {
   @FXML
   private TextArea messageTextArea;
   @FXML
-  private TextArea transactionListTextArea;
+  private ListView<String> transactionListView;
   @FXML
   private TextField idField;
   @FXML
@@ -44,15 +46,36 @@ public class AppController {
   @FXML
   private ChoiceBox<TransactionCategories> transactionCategoryChoiceBox;
   @FXML
+  private TextArea largestTransactionTextField;
+  @FXML
   private TextField totalSumTextField;
   @FXML
   private PieChart categoryPercentageChart;
+  @FXML
+  private Button removeButton;
 
   @FXML
   private void initialize() {
     idField.setText(Integer.toString(idNumberCounter));
     idNumberCounter++;
     transactionCategoryChoiceBox.getItems().addAll(TransactionCategories.values());
+    
+    transactionListView.setOnMouseClicked(event -> {
+      String selectedItem = transactionListView.getSelectionModel().getSelectedItem();
+      if (selectedItem != null) {
+          String[] parts = selectedItem.split(" ");
+
+        if (parts.length >= 4) {
+            idField.setText(parts[0]);
+            nameField.setText(parts[1]);
+            amountField.setText(parts[2]);
+            TransactionCategories category = TransactionCategories.valueOf(parts[3]);
+            transactionCategoryChoiceBox.setValue(category);
+        }
+      }
+      removeButton.setDisable(false);
+    });
+
     Platform.runLater(() -> rootPane.requestFocus());
   }
 
@@ -70,8 +93,10 @@ public class AppController {
       transactionCategoryChoiceBox.getSelectionModel().clearSelection();
       transactionCategoryChoiceBox.setValue(null);
       updateTransactionListAndTotalSum();
-      idField.setText(Integer.toString(idNumberCounter));
       idNumberCounter++;
+      idField.setText(Integer.toString(idNumberCounter));
+
+      largestTransactionTextField.setText("Info the largest transaction: \n" + adapter.getInfoOnLargestTransaction());
     } else {
       openMessagePopup("All fields must be filled in.");
     }
@@ -84,9 +109,9 @@ public class AppController {
   }
 
   private void updateTransactionListAndTotalSum() {
-    transactionListTextArea.setText("");
+    transactionListView.getItems().clear();
     for (String transaction : transactions) {
-      transactionListTextArea.appendText(transaction + "\n");
+      transactionListView.getItems().add(transaction);
     }
     totalSumTextField.setText("Total sum: " + String.format("%.2f", adapter.getTotalSum()));
   }
@@ -105,7 +130,7 @@ public class AppController {
   @FXML
   private void listTransactions(ArrayList<String> transactionList) {
     for (String transaction : transactionList) {
-      transactionListTextArea.appendText(transaction);
+      transactionListView.getItems().add(transaction);
     }
   }
 
@@ -116,7 +141,6 @@ public class AppController {
     } else {
       openMessagePopup("Could not save to file.");
     }
-    
   }
 
   @FXML

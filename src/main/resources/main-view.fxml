@@ -36,6 +36,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -45,44 +46,21 @@
 
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="608.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.simplebudget.AppController">
    <children>
-      <TextField fx:id="idField" editable="false" layoutX="127.0" layoutY="80.0" opacity="0.7" prefHeight="25.0" prefWidth="211.0">
-         <font>
-            <Font name="System Italic" size="12.0" />
-         </font>
-      </TextField>
       <Label layoutX="14.0" layoutY="14.0" text="Transaction details:">
          <font>
             <Font name="System Bold" size="21.0" />
          </font>
       </Label>
-      <TextField fx:id="nameField" layoutX="127.0" layoutY="117.0" prefHeight="25.0" prefWidth="211.0" promptText="E.g. &quot;Coffee&quot;" />
-      <ChoiceBox fx:id="transactionCategoryChoiceBox" layoutX="127.0" layoutY="194.0" prefHeight="25.0" prefWidth="211.0" />
-      <Label layoutX="490.0" layoutY="12.0" prefHeight="30.0" prefWidth="346.0" text="Transactions:">
-         <font>
-            <Font name="System Bold" size="21.0" />
-         </font>
-      </Label>
-      <TextField fx:id="totalSumTextField" editable="false" layoutX="490.0" layoutY="557.0" prefHeight="38.0" prefWidth="346.0" text="Total sum: -">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-      </TextField>
       <Label layoutX="30.0" layoutY="74.0" prefHeight="31.0" prefWidth="68.0" text="ID#:">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="amountField" layoutX="127.0" layoutY="154.0" prefHeight="25.0" prefWidth="211.0" promptText="E.g. &quot;5.50&quot;" />
-      <Button layoutX="72.0" layoutY="267.0" mnemonicParsing="false" onAction="#onAddTransaction" prefHeight="30.0" prefWidth="90.0" text="ADD">
+      <Label layoutX="30.0" layoutY="114.0" prefHeight="31.0" prefWidth="68.0" text="Name:">
          <font>
-            <Font name="System Bold" size="14.0" />
+            <Font name="System Bold" size="16.0" />
          </font>
-      </Button>
-      <Button disable="true" layoutX="233.0" layoutY="267.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" text="REMOVE">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Button>
+      </Label>
       <Label layoutX="30.0" layoutY="151.0" prefHeight="31.0" prefWidth="68.0" text="Amount:">
          <font>
             <Font name="System Bold" size="16.0" />
@@ -93,11 +71,35 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <Label layoutX="30.0" layoutY="114.0" prefHeight="31.0" prefWidth="68.0" text="Name:">
+      <TextField fx:id="idField" editable="false" layoutX="127.0" layoutY="80.0" opacity="0.7" prefHeight="25.0" prefWidth="211.0">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="nameField" layoutX="127.0" layoutY="117.0" prefHeight="25.0" prefWidth="211.0" promptText="E.g. &quot;Coffee&quot;" />
+      <TextField fx:id="amountField" layoutX="127.0" layoutY="154.0" prefHeight="25.0" prefWidth="211.0" promptText="E.g. &quot;5.50&quot;" />
+      <ChoiceBox fx:id="transactionCategoryChoiceBox" layoutX="127.0" layoutY="194.0" prefHeight="25.0" prefWidth="211.0" />
+      <Button layoutX="72.0" layoutY="267.0" mnemonicParsing="false" onAction="#onAddTransaction" prefHeight="30.0" prefWidth="90.0" text="ADD">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="removeButton" disable="true" layoutX="233.0" layoutY="267.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" text="REMOVE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Label layoutX="490.0" layoutY="12.0" prefHeight="30.0" prefWidth="346.0" text="Transactions:">
+         <font>
+            <Font name="System Bold" size="21.0" />
+         </font>
+      </Label>
+      <ListView fx:id="transactionListView" layoutX="490.0" layoutY="51.0" prefHeight="506.0" prefWidth="346.0" />
+      <TextField fx:id="totalSumTextField" editable="false" layoutX="490.0" layoutY="557.0" prefHeight="38.0" prefWidth="346.0" text="Total sum: -">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
-      </Label>
+      </TextField>
     <Button layoutX="22.0" layoutY="558.0" mnemonicParsing="false" onAction="#openChartPopup" prefHeight="31.0" prefWidth="101.0" text="Show graph">
          <font>
             <Font name="System Bold" size="12.0" />
@@ -113,13 +115,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <TextArea fx:id="transactionListTextArea" editable="false" layoutX="490.0" layoutY="51.0" prefHeight="505.0" prefWidth="346.0" wrapText="true" />
-      <Pane layoutX="23.0" layoutY="332.0" prefHeight="200.0" prefWidth="441.0">
-         <children>
-            <TextArea editable="false" prefHeight="200.0" prefWidth="211.0" promptText="Information on largest transaction you will find here..." wrapText="true" />
-            <PieChart layoutX="227.0" layoutY="12.0" prefHeight="176.0" prefWidth="180.0" />
-         </children>
-      </Pane>
+      <TextArea fx:id="largestTransactionTextField" editable="false" layoutX="17.0" layoutY="325.0" prefHeight="72.0" prefWidth="457.0" promptText="Information on largest transaction you will find here..." wrapText="true" />
       <Pane fx:id="chartPopupPane" layoutX="205.0" layoutY="109.0" prefHeight="387.0" prefWidth="441.0" style="-fx-background-color: white;; -fx-border-color: black;;" visible="false">
          <children>
             <PieChart fx:id="categoryPercentageChart" layoutX="14.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="318.0" prefWidth="414.0" title="Percent per category" />
