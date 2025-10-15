@@ -6,6 +6,7 @@
 
 package com.simplebudget;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import budgettracker.TransactionCategories;
@@ -21,10 +22,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 
 
 public class AppController {
-  private final BudgetAdapter adapter = new BudgetAdapter();
+  private Stage stage;
+  private BudgetAdapter adapter;
   private static int idNumberCounter;
   private ArrayList<String> transactions = new ArrayList<>();
   @FXML
@@ -44,7 +48,7 @@ public class AppController {
   @FXML
   private TextField amountField;
   @FXML
-  private ChoiceBox<TransactionCategories> transactionCategoryChoiceBox;
+  private ChoiceBox<TransactionCategories> transactionCategoryChoiceBox; // går detta att lösa så att controllern får datan från adaptern istället för att hämta själv?
   @FXML
   private TextArea largestTransactionTextField;
   @FXML
@@ -53,6 +57,14 @@ public class AppController {
   private PieChart categoryPercentageChart;
   @FXML
   private Button removeButton;
+
+  void setStage(Stage stage) {
+      this.stage = stage;
+  }
+
+  void setAdapter(BudgetAdapter adapter) {
+    this.adapter = adapter;
+  }
 
   @FXML
   private void initialize() {
@@ -136,12 +148,25 @@ public class AppController {
 
   @FXML
   private void onSaveLogToFile() {
-    if (adapter.saveLogToFile()) {
-      openMessagePopup("Log saved to file.");
-    } else {
-      openMessagePopup("Could not save to file.");
-    }
+      DirectoryChooser directoryChooser = new DirectoryChooser();
+      directoryChooser.setTitle("Choose folder for logs");
+
+      File selectedDirectory = directoryChooser.showDialog(stage);
+
+      if (selectedDirectory != null) {
+          String path = selectedDirectory.getAbsolutePath();
+          System.out.println("Chosen folder: " + path);
+
+          if (adapter.saveLogToFile(path)) {
+              openMessagePopup("Log saved to file.");
+          } else {
+              openMessagePopup("Could not save to file.");
+          }
+      } else {
+          openMessagePopup("No folder selected.");
+      }
   }
+
 
   @FXML
   private void openChartPopup() {

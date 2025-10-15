@@ -15,6 +15,11 @@ public class App extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/main-view.fxml"));
         Scene scene = new Scene(loader.load());
+
+        AppController controller = loader.getController();
+        controller.setStage(stage);
+        controller.setAdapter(new BudgetAdapter());
+
         stage.setScene(scene);
         stage.setTitle("Simple Budget App");
         stage.show();

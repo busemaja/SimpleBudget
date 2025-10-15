@@ -7,6 +7,8 @@
 
  package com.simplebudget;
 
+import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import budgettracker.BudgetTracker;
@@ -78,8 +80,15 @@ class BudgetAdapter {
    * 
    * @return
    */
-  boolean saveLogToFile() {
-    //tracker.saveLogToFile(filepath);
-    return false;
+  boolean saveLogToFile(String directoryPath) {
+    LocalDate date = LocalDate.now();
+    Path filePath = Path.of(directoryPath, "transactionlog_" + date + ".txt");
+    System.out.println("Filepath is: " + filePath);
+    try {
+      tracker.saveLogToFile(filePath.toString());
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
   }
 }
