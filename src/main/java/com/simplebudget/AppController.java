@@ -95,7 +95,7 @@ public class AppController {
   private void onAddTransaction() {
     if (isInputvalid()) {
       String name = nameField.getText();
-      double amount = Double.parseDouble(amountField.getText());
+      double amount = Double.parseDouble(amountField.getText().replace(',', '.'));
       TransactionCategories category = transactionCategoryChoiceBox.getSelectionModel().getSelectedItem();
 
       transactions = adapter.addTransaction(idNumberCounter, name, amount, category);
@@ -111,6 +111,25 @@ public class AppController {
       largestTransactionTextField.setText("Info the largest transaction: \n" + adapter.getInfoOnLargestTransaction());
     } else {
       openMessagePopup("All fields must be filled in.");
+    }
+  }
+
+@FXML
+  private void onRemoveTransaction() {
+    int id = Integer.parseInt(idField.getText());
+    if (adapter.removeTransaction(id)) {
+      idField.setText(Integer.toString(idNumberCounter));
+      nameField.setText("");
+      amountField.setText("");
+      transactionCategoryChoiceBox.getSelectionModel().clearSelection();
+      transactionCategoryChoiceBox.setValue(null);
+      // ta bort transactionen från arraylist här i klassen
+      updateTransactionListAndTotalSum(); // Är det vettigt att ha en lista av transaktioner i denna klass?
+      largestTransactionTextField.setText("Info the largest transaction: \n" + adapter.getInfoOnLargestTransaction());
+      removeButton.setDisable(true);
+      openMessagePopup("Transaction removed.");
+    } else {
+      openMessagePopup("Could not remove transaction.");
     }
   }
 
@@ -166,7 +185,6 @@ public class AppController {
           openMessagePopup("No folder selected.");
       }
   }
-
 
   @FXML
   private void openChartPopup() {

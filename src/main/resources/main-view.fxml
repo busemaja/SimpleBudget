@@ -43,7 +43,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="608.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.simplebudget.AppController">
    <children>
       <Label layoutX="14.0" layoutY="14.0" text="Transaction details:">
@@ -84,7 +83,7 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="removeButton" disable="true" layoutX="233.0" layoutY="267.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" text="REMOVE">
+      <Button fx:id="removeButton" disable="true" layoutX="233.0" layoutY="267.0" mnemonicParsing="false" onAction="#onRemoveTransaction" prefHeight="30.0" prefWidth="90.0" text="REMOVE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>

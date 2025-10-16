@@ -38,6 +38,15 @@ class BudgetAdapter {
     return transactions;
   }
 
+  boolean removeTransaction(int id) {
+    try {
+        tracker.removeTransactionAndLogIt(id);
+        return true;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
   /**
    * 
    * @return
