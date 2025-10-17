@@ -73,6 +73,10 @@ class BudgetTrackerAdapter {
       if (parts.length == 2) {
         String category = parts[0];
         double amount = Double.parseDouble(parts[1].replace("%", "").replace(",", "."));
+        if (amount == 0.0)
+        {
+          continue;
+        }
         pieData.add(new PieChart.Data(category, amount));
       }
     }

@@ -114,7 +114,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <TextArea fx:id="largestTransactionTextField" editable="false" layoutX="17.0" layoutY="325.0" prefHeight="72.0" prefWidth="457.0" promptText="Information on largest transaction you will find here..." wrapText="true" />
+      <TextArea fx:id="largestTransactionTextArea" editable="false" layoutX="17.0" layoutY="325.0" prefHeight="72.0" prefWidth="457.0" promptText="Information on largest transaction you will find here..." wrapText="true" />
       <Pane fx:id="chartPopupPane" layoutX="205.0" layoutY="109.0" prefHeight="387.0" prefWidth="441.0" style="-fx-background-color: white;; -fx-border-color: black;;" visible="false">
          <children>
             <PieChart fx:id="categoryPercentageChart" layoutX="14.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="318.0" prefWidth="414.0" title="Percent per category" />
