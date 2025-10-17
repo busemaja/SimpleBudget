@@ -13,16 +13,21 @@ import javafx.stage.Stage;
 public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main-view.fxml"));
-        Scene scene = new Scene(loader.load());
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/main-view.fxml"));
+    
+    // Create controller manually and set adapter BEFORE loading FXML
+    AppController controller = new AppController();
+    controller.setStage(stage);
+    controller.setAdapter(new BudgetTrackerAdapter());
+    
+    // Set the controller so FXML uses our pre-configured instance
+    loader.setController(controller);
+    
+    Scene scene = new Scene(loader.load());
 
-        AppController controller = loader.getController();
-        controller.setStage(stage);
-        controller.setAdapter(new BudgetAdapter());
-
-        stage.setScene(scene);
-        stage.setTitle("Simple Budget App");
-        stage.show();
+    stage.setScene(scene);
+    stage.setTitle("Simple Budget App");
+    stage.show();
     }
 
     public static void main(String[] args) {

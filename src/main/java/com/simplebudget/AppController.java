@@ -9,10 +9,8 @@ package com.simplebudget;
 import java.io.File;
 import java.util.ArrayList;
 
-import budgettracker.TransactionCategories;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
@@ -28,179 +26,167 @@ import javafx.stage.Stage;
 
 public class AppController {
   private Stage stage;
-  private BudgetAdapter adapter;
+  private BudgetTrackerAdapter adapter;
   private static int idNumberCounter;
-  private ArrayList<String> transactions = new ArrayList<>();
-  @FXML
-  private AnchorPane rootPane;
-  @FXML
-  private Pane chartPopupPane;
-  @FXML
-  private Pane messagePopupPane;
-  @FXML
-  private TextArea messageTextArea;
-  @FXML
-  private ListView<String> transactionListView;
-  @FXML
-  private TextField idField;
-  @FXML
-  private TextField nameField;
-  @FXML
-  private TextField amountField;
-  @FXML
-  private ChoiceBox<TransactionCategories> transactionCategoryChoiceBox; // går detta att lösa så att controllern får datan från adaptern istället för att hämta själv?
-  @FXML
-  private TextArea largestTransactionTextField;
-  @FXML
-  private TextField totalSumTextField;
-  @FXML
-  private PieChart categoryPercentageChart;
-  @FXML
-  private Button removeButton;
+  @FXML private AnchorPane rootPane;
+  @FXML private Pane chartPopupPane;
+  @FXML private Pane messagePopupPane;
+  @FXML private TextArea messageTextArea;
+  @FXML private ListView<String> transactionListView;
+  @FXML private TextField idField;
+  @FXML private TextField nameField;
+  @FXML private TextField amountField;
+  @FXML private ChoiceBox<String> transactionCategoryChoiceBox;
+  @FXML private TextArea largestTransactionTextArea;
+  @FXML private TextField totalSumTextField;
+  @FXML private PieChart categoryPercentageChart;
+  @FXML private Button addButton;
+  @FXML private Button removeButton;
 
   void setStage(Stage stage) {
-      this.stage = stage;
+    this.stage = stage;
   }
 
-  void setAdapter(BudgetAdapter adapter) {
+  void setAdapter(BudgetTrackerAdapter adapter) {
     this.adapter = adapter;
   }
 
-  @FXML
-  private void initialize() {
-    idField.setText(Integer.toString(idNumberCounter));
-    idNumberCounter++;
-    transactionCategoryChoiceBox.getItems().addAll(TransactionCategories.values());
-    
-    transactionListView.setOnMouseClicked(event -> {
-      String selectedItem = transactionListView.getSelectionModel().getSelectedItem();
-      if (selectedItem != null) {
-          String[] parts = selectedItem.split(" ");
-
-        if (parts.length >= 4) {
-            idField.setText(parts[0]);
-            nameField.setText(parts[1]);
-            amountField.setText(parts[2]);
-            TransactionCategories category = TransactionCategories.valueOf(parts[3]);
-            transactionCategoryChoiceBox.setValue(category);
-        }
-      }
-      removeButton.setDisable(false);
-    });
-
+  @FXML private void initialize() {
+    updateIdFieldWithNextId();
+    transactionCategoryChoiceBox.getItems().addAll(adapter.getCategories());
+    setUpTransactionListViewListener();
     Platform.runLater(() -> rootPane.requestFocus());
   }
 
-  @FXML
-  private void onAddTransaction() {
-    if (isInputvalid()) {
-      String name = nameField.getText();
+  /*
+   * When clicked, a transaction is transferred to the textFields and can be removed completely from the app.
+   */
+  private void setUpTransactionListViewListener() {
+    transactionListView.setOnMouseClicked(event -> {
+      String selectedItem = transactionListView.getSelectionModel().getSelectedItem();
+      if (selectedItem != null) {
+        String[] parts = selectedItem.split(" ");
+
+        if (parts.length == 4) {
+          idField.setText(parts[0]);
+          nameField.setText(parts[1]);
+          amountField.setText(parts[2]);
+          transactionCategoryChoiceBox.setValue(parts[3]);
+          removeButton.setDisable(false);
+          addButton.setDisable(true);
+        }
+      }
+    });
+  }
+
+  private void updateIdFieldWithNextId() {
+    idField.setText(Integer.toString(idNumberCounter));
+    idNumberCounter++;
+  }
+
+  @FXML private void onAddTransaction() {
+    if (isInputPresent()) {
+      String name = nameField.getText().replace(" ", "_");
       double amount = Double.parseDouble(amountField.getText().replace(',', '.'));
-      TransactionCategories category = transactionCategoryChoiceBox.getSelectionModel().getSelectedItem();
+      String category = transactionCategoryChoiceBox.getSelectionModel().getSelectedItem();
 
-      transactions = adapter.addTransaction(idNumberCounter, name, amount, category);
-      
-      nameField.setText("");
-      amountField.setText("");
-      transactionCategoryChoiceBox.getSelectionModel().clearSelection();
-      transactionCategoryChoiceBox.setValue(null);
-      updateTransactionListAndTotalSum();
-      idNumberCounter++;
-      idField.setText(Integer.toString(idNumberCounter));
-
-      largestTransactionTextField.setText("Info the largest transaction: \n" + adapter.getInfoOnLargestTransaction());
+      if (adapter.addTransaction(idNumberCounter, name, amount, category)) {
+        clearInputFields();
+        updateTransactionListAndTotalSum();
+        updateIdFieldWithNextId();
+        updateLargestTransactionView();
+      }
     } else {
       openMessagePopup("All fields must be filled in.");
     }
   }
 
-@FXML
-  private void onRemoveTransaction() {
+  /*
+   * No fields are allowed to be left empty on input.
+   */
+  private boolean isInputPresent() {
+    return !nameField.getText().isBlank()
+      && !amountField.getText().isBlank()
+      && transactionCategoryChoiceBox.getSelectionModel().getSelectedItem() != null;
+  }
+
+  private void clearInputFields() {
+    nameField.setText("");
+    amountField.setText("");
+    transactionCategoryChoiceBox.getSelectionModel().clearSelection();
+    transactionCategoryChoiceBox.setValue(null);
+  }
+
+  private void updateLargestTransactionView() {
+    largestTransactionTextArea.setText("Info on the largest transaction: \n" + adapter.getInfoOnLargestTransaction());
+  }
+
+  @FXML private void onRemoveTransaction() {
     int id = Integer.parseInt(idField.getText());
     if (adapter.removeTransaction(id)) {
-      idField.setText(Integer.toString(idNumberCounter));
-      nameField.setText("");
-      amountField.setText("");
-      transactionCategoryChoiceBox.getSelectionModel().clearSelection();
-      transactionCategoryChoiceBox.setValue(null);
-      // ta bort transactionen från arraylist här i klassen
-      updateTransactionListAndTotalSum(); // Är det vettigt att ha en lista av transaktioner i denna klass?
-      largestTransactionTextField.setText("Info the largest transaction: \n" + adapter.getInfoOnLargestTransaction());
+      updateIdFieldWithNextId();
+      clearInputFields();
+      updateTransactionListAndTotalSum();
+      updateLargestTransactionView();
       removeButton.setDisable(true);
+      addButton.setDisable(false);
       openMessagePopup("Transaction removed.");
     } else {
       openMessagePopup("Could not remove transaction.");
     }
   }
 
-  private boolean isInputvalid() {
-    return !nameField.getText().isBlank()
-        && !amountField.getText().isBlank()
-        && transactionCategoryChoiceBox.getSelectionModel().getSelectedItem() != null;
-  }
-
   private void updateTransactionListAndTotalSum() {
     transactionListView.getItems().clear();
+    ArrayList<String> transactions = adapter.getTransactionList();
     for (String transaction : transactions) {
       transactionListView.getItems().add(transaction);
     }
     totalSumTextField.setText("Total sum: " + String.format("%.2f", adapter.getTotalSum()));
   }
 
-  @FXML
-  private void openMessagePopup(String message) {
+  @FXML private void openMessagePopup(String message) {
     messageTextArea.setText(message);
     messagePopupPane.setVisible(true);
   }
 
-  @FXML
-  private void closeMessagePopup() {
+  @FXML private void closeMessagePopup() {
     messagePopupPane.setVisible(false);
   }
 
-  @FXML
-  private void listTransactions(ArrayList<String> transactionList) {
-    for (String transaction : transactionList) {
-      transactionListView.getItems().add(transaction);
-    }
-  }
-
-  @FXML
-  private void onSaveLogToFile() {
+  @FXML private void onSaveLogToFile() {
+    if (adapter.getTotalSum() != 0) {
       DirectoryChooser directoryChooser = new DirectoryChooser();
       directoryChooser.setTitle("Choose folder for logs");
 
       File selectedDirectory = directoryChooser.showDialog(stage);
-
       if (selectedDirectory != null) {
-          String path = selectedDirectory.getAbsolutePath();
-          System.out.println("Chosen folder: " + path);
-
-          if (adapter.saveLogToFile(path)) {
-              openMessagePopup("Log saved to file.");
-          } else {
-              openMessagePopup("Could not save to file.");
-          }
+        String path = selectedDirectory.getAbsolutePath();
+        boolean success = adapter.saveLogToFile(path);
+        openMessagePopup(success ? "Log saved to file." : "Could not save to file.");
       } else {
-          openMessagePopup("No folder selected.");
+        openMessagePopup("No folder selected.");
       }
+    } else {
+      openMessagePopup("No transactions in the log.");
+    }
   }
 
-  @FXML
-  private void openChartPopup() {
-    ObservableList<PieChart.Data> chartData = adapter.getPercentagesByCategory();
+  /*
+   * Currently shows the values strangely, e.g. labels are shown in graph even if value is 0.
+   */
+  @FXML private void onShowGraph() {
+    ObservableList<PieChart.Data> chartData = adapter.getCategoryDataForPieChart();
     categoryPercentageChart.setData(chartData);
     chartPopupPane.setVisible(true);
   }
 
-  @FXML
-  private void closeChartPopup() {
+  @FXML private void onCloseGraph() {
     chartPopupPane.setVisible(false);
   }
 
-  @FXML
-  private void closeApp(ActionEvent event) {
-    System.exit(0);
+  @FXML private void onExitApp() {
+    Platform.exit();
   }
 
 }

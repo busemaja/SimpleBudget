@@ -43,7 +43,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="608.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.simplebudget.AppController">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="608.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label layoutX="14.0" layoutY="14.0" text="Transaction details:">
          <font>
@@ -78,7 +78,7 @@
       <TextField fx:id="nameField" layoutX="127.0" layoutY="117.0" prefHeight="25.0" prefWidth="211.0" promptText="E.g. &quot;Coffee&quot;" />
       <TextField fx:id="amountField" layoutX="127.0" layoutY="154.0" prefHeight="25.0" prefWidth="211.0" promptText="E.g. &quot;5.50&quot;" />
       <ChoiceBox fx:id="transactionCategoryChoiceBox" layoutX="127.0" layoutY="194.0" prefHeight="25.0" prefWidth="211.0" />
-      <Button layoutX="72.0" layoutY="267.0" mnemonicParsing="false" onAction="#onAddTransaction" prefHeight="30.0" prefWidth="90.0" text="ADD">
+      <Button fx:id="addButton" layoutX="72.0" layoutY="267.0" mnemonicParsing="false" onAction="#onAddTransaction" prefHeight="30.0" prefWidth="90.0" text="ADD">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
@@ -99,7 +99,7 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </TextField>
-    <Button layoutX="22.0" layoutY="558.0" mnemonicParsing="false" onAction="#openChartPopup" prefHeight="31.0" prefWidth="101.0" text="Show graph">
+    <Button layoutX="22.0" layoutY="558.0" mnemonicParsing="false" onAction="#onShowGraph" prefHeight="31.0" prefWidth="101.0" text="Show graph">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -109,7 +109,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button layoutX="356.0" layoutY="558.0" mnemonicParsing="false" onAction="#closeApp" prefHeight="31.0" prefWidth="101.0" text="Exit app">
+      <Button layoutX="356.0" layoutY="558.0" mnemonicParsing="false" onAction="#onExitApp" prefHeight="31.0" prefWidth="101.0" text="Exit app">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -118,7 +118,7 @@
       <Pane fx:id="chartPopupPane" layoutX="205.0" layoutY="109.0" prefHeight="387.0" prefWidth="441.0" style="-fx-background-color: white;; -fx-border-color: black;;" visible="false">
          <children>
             <PieChart fx:id="categoryPercentageChart" layoutX="14.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="318.0" prefWidth="414.0" title="Percent per category" />
-            <Button layoutX="182.0" layoutY="342.0" mnemonicParsing="false" onAction="#closeChartPopup" prefHeight="31.0" prefWidth="77.0" text="Close">
+            <Button layoutX="170.0" layoutY="342.0" mnemonicParsing="false" onAction="#onCloseGraph" prefHeight="31.0" prefWidth="101.0" text="Close graph">
                <font>
                   <Font size="13.0" />
                </font>
