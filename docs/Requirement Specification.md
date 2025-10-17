@@ -21,10 +21,8 @@ ID|Requirement|Priority|Testability
 FR1|The user shall be able to add a transaction through the GUI.|High|Add valid input → new transaction appears in list.
 FR2|The user shall be able to remove a transaction through the GUI.|High|Remove selected transaction → it disappears.
 FR3|The system shall display the current total of all transactions.|High|Compare displayed total with manual sum.
-FR4|The system shall display totals per category.|Medium|Compare category totals with manual calculation.
-FR5|The system shall show the largest transaction’s details.|Medium|Verify displayed info matches the largest amount.
-FR6|The system shall display a log of all transaction actions.|Medium|Verify log entries correspond to performed actions.
-FR7|The system shall allow the user to save the transaction log to a text file.|Low|Verify file exists and contains expected log data.
+FR4|The system shall show the largest transaction’s details.|Medium|Verify displayed info matches the largest amount.
+FR5|The system shall allow the user to save the transaction log to a text file.|Low|Verify file exists and contains expected log data.
 
 ## 4. Non-Functional Requirements
 ID|Requirement|Priority
