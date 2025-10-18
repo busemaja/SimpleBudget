@@ -3,7 +3,7 @@
 **App version:** 1.0.1  
 **System:** Windows 11 pro  
 **Tester:** Maria Jansson  
-**Requirement specification:** [Link](/docs/Requirement%20Specification.md)  
+**Requirement specification:** [Link](/docs/Requirement_specification.md)  
 
 ## Manual test results
 
@@ -46,3 +46,4 @@ Several bugs were found during testing:
 - When a transaction is removed the ID-text field is updated with a number too high (due to usage of updateIdFieldWithNextId() in onRemoveTransaction() in AppController.java)
 - If there is only one transaction in the list and it is removed, the ADD/REMOVE buttons are not correctly updated after the removal, and the "Largest transaction"-text area is not emptied
 - When saving to file the ID numbers are not correct on the "Remove"-posts
+- Missing exception handling if amount is not a number
