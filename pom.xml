@@ -59,27 +59,27 @@
                 </configuration>
             </plugin>
 
-            <!-- Shade Plugin: create fat JAR -->
+            <!-- Dependency Plugin: copy all dependencies to target/lib -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.1</version>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.0</version>
                 <executions>
                     <execution>
+                        <id>copy-dependencies</id>
                         <phase>package</phase>
-                        <goals><goal>shade</goal></goals>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
                         <configuration>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.simplebudget.App</mainClass>
-                                </transformer>
-                            </transformers>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <includeScope>runtime</includeScope>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
-            <!-- jpackage Plugin: create native Windows exe -->
+            <!-- jpackage Plugin: create native Windows exe (classpath mode) -->
             <plugin>
                 <groupId>org.panteleyev</groupId>
                 <artifactId>jpackage-maven-plugin</artifactId>
@@ -95,13 +95,17 @@
                     <destination>${project.build.directory}/dist</destination>
                     <javaOptions>
                         <option>-Dfile.encoding=UTF-8</option>
+                        <option>--module-path</option>
+                        <option>$APPDIR\lib</option>
+                        <option>--add-modules</option>
+                        <option>javafx.controls,javafx.fxml</option>
                     </javaOptions>
-                    <winMenu>true</winMenu>
-                    <winShortcut>true</winShortcut>
                     <winDirChooser>true</winDirChooser>
+                    <winShortcut>true</winShortcut>
+                    <winMenu>true</winMenu>
+                    <winMenuGroup>SimpleBudget</winMenuGroup>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 </project>
