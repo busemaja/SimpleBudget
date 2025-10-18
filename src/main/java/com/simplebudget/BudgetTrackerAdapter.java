@@ -39,9 +39,10 @@ class BudgetTrackerAdapter {
       tracker.removeTransactionAndLogIt(id);
 
       String idAsString = Integer.toString(id);
-      for (String transaction : transactions) {
+      for (int i = 0; i < transactions.size(); i++) {
+        String transaction = transactions.get(i);
         if (transaction.startsWith(idAsString + " ")) {
-          transactions.remove(transaction);
+          transactions.remove(i);
           break;
         }
       }
