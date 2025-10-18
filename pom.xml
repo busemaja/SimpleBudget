@@ -6,7 +6,7 @@
 
     <groupId>com.simplebudget</groupId>
     <artifactId>simplebudget</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>SimpleBudget</name>
 
     <properties>
@@ -88,7 +88,7 @@
                     <name>SimpleBudget</name>
                     <appVersion>1.0.1</appVersion>
                     <vendor>Maria Jansson</vendor>
-                    <mainJar>simplebudget-1.0-SNAPSHOT.jar</mainJar>
+                    <mainJar>simplebudget-1.0.1.jar</mainJar>
                     <mainClass>com.simplebudget.App</mainClass>
                     <type>EXE</type>
                     <input>${project.build.directory}</input>
