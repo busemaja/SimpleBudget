@@ -31,3 +31,6 @@ Thumbs.db
 
 # Code counter
 .VSCodeCounter/
+
+# Internal Maven build file
+dependency-reduced-pom.xml
