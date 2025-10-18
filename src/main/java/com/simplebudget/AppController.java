@@ -80,8 +80,8 @@ public class AppController {
   }
 
   private void updateIdFieldWithNextId() {
-    idField.setText(Integer.toString(idNumberCounter));
     idNumberCounter++;
+    idField.setText(Integer.toString(idNumberCounter));
   }
 
   @FXML private void onAddTransaction() {
